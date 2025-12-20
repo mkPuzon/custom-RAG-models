@@ -1,0 +1,7 @@
+# ---- for running models ---- #
+ollama>=0.6.1
+transformers
+
+# ---- for collecting data ---- #
+wikipeadia>=1.4.0
+docling>=2.65.0
