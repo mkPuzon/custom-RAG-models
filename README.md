@@ -15,6 +15,29 @@ Though many of us are used to using large models like ChatGPT, this project leve
 
 
 ## 2 Getting Started
+This project requires that you have PostgreSQL installed on your machine. To create the PostgreSQL database:
+
+```bash
+sudo -u postgres psql postgres
+psql
+CREATE TABLE text_embeddings;
+\c text_embeddings;
+CREATE EXTENSION vector;
+```
+Once the database is set up, make sure to create a .env file and add your database url to it. Use the `test_db_conn.py` script to ensure you can connect to the database you created.
+
+This projct uses a hyprid local environment with both Conda and Pip. Conda is better suited for dealing with heavier machine learning packages that use languages other than Python under the hood. For the packages that are not available in Conda's channels, pip works well. To set up the environment:
+
+```bash
+# if you don't have conda installed
+sudo apt-get update && sudo apt-get upgrade
+wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+bash Miniconda3-latest-Linux-x86_64.sh
+conda -V # check install worked
+
+# once conda is intalled
+conda env create -f environment.yaml
+```
 
 
 ## 3 The RAG Pipeline
@@ -24,7 +47,7 @@ This approach has the advantange of keeping ideas isolated from one another, mak
 
 Finally, the retrieved context is appended to the user prompt which is then sent to an LLM to respond. This pipeline allows for relevant context to be found efficiently and with high accuracy. For specific metrics see section 5 below.
 
-```mermaid
+<!-- ```mermaid
 graph LR
     %% Styles
     classDef storage fill:#e1f5fe,stroke:#01579b,stroke-width:2px;
@@ -60,8 +83,11 @@ graph LR
         Context --> LLM[LLM]:::process
         LLM --> Answer[Final Answer]:::storage
     end
-```
+``` -->
 
 ## 4 LLM Model Breakdowns
+To create your own models in Ollama:
+```ollama create <custom_name> -f ModelFile```
+```ollama show --modelfile <model_name>```
 
 ## 5 Results

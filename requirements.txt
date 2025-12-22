@@ -1,7 +1,13 @@
 # ---- for running models ---- #
 ollama>=0.6.1
 transformers
+nltk
 
-# ---- for collecting data ---- #
+# ---- for database ---- #
+sqlalchemy 
+pgvector
+psycopg2
+
+# ---- for collecting & processing data ---- #
 wikipeadia>=1.4.0
 docling>=2.65.0
