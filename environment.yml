@@ -1,0 +1,22 @@
+name: rag_env
+channels:
+  - pytorch
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.12
+  - pytorch-cpu
+  - torchvision
+  - psycopg2-binary
+  - pip
+  - pip:
+    - ipykernel
+    - transformers
+    - sentence_transformers
+    - ollama
+    - nltk
+    - python-dotenv
+    - sqlalchemy 
+    - pgvector
+    - wikipedia
+    - docling  
