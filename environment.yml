@@ -11,12 +11,11 @@ dependencies:
   - pip
   - pip:
     - ipykernel
+    - ipywidgets
     - transformers
     - sentence_transformers
     - ollama
     - nltk
-    - python-dotenv
     - sqlalchemy 
     - pgvector
-    - wikipedia
     - docling  
