@@ -1,16 +1,20 @@
-'''
+'''generate_corpus.py
+
+Contains functions for generating a plain text corpus from multiple sources. Currently supports:
+- Wikipedia
+- Local pdfs
 
 Dec 2025
 '''
 import os
 import re
 import wikipedia
-from utils import time_func
+
+from docling.document_converter import DocumentConverter
 
 def sanitize_filename(input_string):
     return re.sub(r'[^a-zA-Z0-9]', '_', input_string)
 
-@time_func
 def generate_corpus_wiki(search_term="Buddhism", num_articles=1000, output_dir="all_articles"):
     os.makedirs(output_dir, exist_ok=True)
 
@@ -33,5 +37,15 @@ def generate_corpus_wiki(search_term="Buddhism", num_articles=1000, output_dir="
             continue
     print(f"\nProcess complete. Saved {len(articles)} articles.")
 
+def generate_corpus_pdf(input_dir: str, output_dir: str = "corpuses/pdf_output"):
+    # TODO 
+    os.makedirs(output_dir, exist_ok=True)
+    for root, dirs, files in os.walk(input_dir):
+        for file in files:
+            filepath = os.path.join(root, file)
+            conv = DocumentConverter()
+            doc = conv.convert(filepath).document
+    
 if __name__ == "__main__":
-    generate_corpus_wiki(search_term="buddhism", num_articles=20, output_dir="buddhism_articles")
+    # generate_corpus_wiki(search_term="optic flow", num_articles=20, output_dir="corpuses/optic_flow")
+    generate_corpus_pdf(input_dir="corpuses/pdfs", output_dir="corpuses/OWLabResources")
