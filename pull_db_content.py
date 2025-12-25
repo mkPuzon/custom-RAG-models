@@ -3,7 +3,7 @@
 Dec 2025
 '''
 from sentence_transformers import SentenceTransformer
-from database_embeddings import get_psql_session, TextEmbedding
+from populate_db import get_psql_session, TextEmbedding
 
 def search_embeddings(query_embedding, session, limit=5):
     return session.query(TextEmbedding.id, TextEmbedding.sentence_number, TextEmbedding.content, TextEmbedding.file_name, \

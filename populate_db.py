@@ -4,10 +4,12 @@ Populates a Postgres db with sentence-tokenized data from a local directory.
 Dec 2025
 '''
 import os
+import sys
 import gc
 import nltk
 import torch
 
+from dotenv import load_dotenv
 from nltk.tokenize import sent_tokenize
 from sentence_transformers import SentenceTransformer
 from sqlalchemy import create_engine, Column, Integer, String
@@ -36,9 +38,12 @@ class TextEmbedding(Base):
 
 def get_psql_session() -> sessionmaker:
     '''Creates a connection to database.'''
-    # engine = create_engine('postgresql://postgres:postgres@localhost/text_embeddings')
-    engine = create_engine('postgresql+psycopg2://postgres:postgres@localhost:5432/text_embeddings')
+    load_dotenv()
+    DB_URL = os.getenv("DATABASE_URL")
+
+    engine = create_engine(DB_URL)
     Base.metadata.create_all(engine)
+
     return sessionmaker(bind=engine)
 
 def insert_embeddings(embeddings: list[float], contents: list[str], file_names: list[str], session: sessionmaker) -> None:
@@ -87,7 +92,7 @@ def populate_vector_db(folder_path: str='all_articles') -> None:
                         session.add(new_embedding)
                 # commit once per file
                 session.commit()
-            print(f"Successfully generated embeddings for {file_path}")
+            print(f"    [S] Generated embeddings for {file_path}")
             # cleen up memory
             gc.collect()
             torch.cuda.empty_cache()
@@ -95,6 +100,13 @@ def populate_vector_db(folder_path: str='all_articles') -> None:
         except Exception as e:
             print(f"Error processing {filename}: {str(e)}")
             continue
+    print(f"[Success] Embeddings generated for all files in {folder_path}")
 
 if __name__ == "__main__":
-    populate_vector_db(folder_path="buddhism_articles")
+    if len(sys.argv) != 2:
+        print(f"[Error] Incorect number of arguments passed. Usage: $ python populate_db.py <path_to_corpus_folder>")
+        exit
+    elif not os.path.exists(sys.argv[1]):
+        print(f"[Error] Provided path does not exist: {sys.argv[1]}")
+    else:
+        populate_vector_db(folder_path=sys.argv[1])
